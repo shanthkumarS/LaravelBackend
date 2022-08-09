@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Http\Middleware;
+namespace App\Http\Middleware\Authentication;
 
+use App\Models\Role;
 use Closure;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 
@@ -18,7 +20,10 @@ class AdminMiddleware
     public function handle(Request $request, Closure $next)
     {
         $user = App::make('user');
-        print_r($user);
+        $role = $user->roles->where('name', 'admin')->first();
+        if (! $role instanceof Role) {
+            throw new Exception("You are not authorized to access this page");
+        }
         return $next($request);
     }
 }

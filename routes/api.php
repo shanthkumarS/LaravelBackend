@@ -4,7 +4,7 @@ use App\Http\Controllers\Authentication\LoginController;
 use App\Http\Controllers\User\RoleController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\UserRolesController;
-use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\Authentication\AdminMiddleware;
 use App\Http\Middleware\Authentication\ApiMiddleware;
 use Illuminate\Support\Facades\Route;
 
@@ -22,7 +22,7 @@ Route::post('login', [LoginController::class, 'login']);
 
 Route::middleware(ApiMiddleware::class)->group(function() {
 
-    // Route::middleware(AdminMiddleware::class)->group(function() {
+    Route::middleware(AdminMiddleware::class)->group(function() {
 
         Route::get('users', [UserController::class, 'index']);
 
@@ -42,7 +42,7 @@ Route::middleware(ApiMiddleware::class)->group(function() {
             Route::get('/{user_id}', [UserRolesController::class, 'index']);
         });
 
-    // });
+    });
 
     /** @todo: Add group of route and services for other role*/
 });
